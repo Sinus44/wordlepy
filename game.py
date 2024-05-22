@@ -16,10 +16,12 @@ class Game:
         self.plane = []
         self.current_word = ""
         self.ended = True
+        self.win = False
         self.start()
 
     def start(self):
         self.ended = False
+        self.win = False
         self.current_attempt = 0
         self.current_symbol = 0
         self.words = word_reader.read_words(self.words_path, self.words_size)
@@ -65,6 +67,7 @@ class Game:
 
         if self.get_text() == self.current_word:
             self.ended = True
+            self.win = True
 
         return self.ended
 
@@ -73,9 +76,9 @@ class Game:
             return
 
         if not self.check():
-            #  highlight
             if self.current_attempt < self.attempt_count - 1:
                 self.current_attempt += 1
                 self.current_symbol = 0
             else:
                 self.ended = True
+                self.win = False

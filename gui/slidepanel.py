@@ -145,8 +145,8 @@ class SlidePanel(Element):
         sum_width = sum([elem.size[0] for elem in self.child])
         sum_height = sum([elem.size[1] for elem in self.child])
 
-        delta_width = sum_width - self.size[0]
-        delta_height = sum_height - self.size[1]
+        delta_width = max(0, sum_width - self.size[0])
+        delta_height = max(0, sum_height - self.size[1])
 
         if self.style.get_property("align") == "vertical":
             previous_height = 0

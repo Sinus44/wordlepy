@@ -4,14 +4,18 @@ class Layout:
 
     def add_element(self, element):
         self.children.append(element)
+        element.render()
 
     def add_elements(self, *args):
         for element in args:
             self.add_element(element)
 
+
     def reset(self):
         for element in self.children:
             element.reset()
+
+        self.render()
 
     def draw(self, surface, auto_render=False):
         for child in self.children:

@@ -4,7 +4,7 @@ import cellcodes
 import colors
 import keyconverter
 from scenectrl import Scene
-from .mainscenegui import layout, cells, keyboard, enter_button, delete_button, new_game_button, label
+from .mainscenegui import layout, cells, keyboard, enter_button, delete_button, new_game_button, label, menu_button
 
 
 class MainScene(Scene):
@@ -18,7 +18,11 @@ class MainScene(Scene):
         delete_button.on_click_handlers.append(self.gui_keyboard_delete_symbol)
         enter_button.on_click_handlers.append(self.gui_enter_press)
         new_game_button.on_click_handlers.append(self.gui_new_game)
+        menu_button.on_click_handlers.append(self.gui_menu)
         self.render_require = False
+
+    def gui_menu(self, event, sender):
+        self.app.scene_controller.select_scene("menu")
 
     def gui_new_game(self, event, sender):
         self.app.game.start()
@@ -66,6 +70,10 @@ class MainScene(Scene):
                 key.style.set_property("normal", "background_color",
                                        self.get_color_by_state(self.app.game.get_state_keyboard(key.text)))
 
+    def select(self):
+        layout.reset()
+        layout.render()
+
     def draw_tick(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -84,6 +92,9 @@ class MainScene(Scene):
                     else:
                         self.app.game.enter()
 
+                elif event.key == pygame.K_ESCAPE:
+                    self.gui_menu(None, None)
+
             layout.event(event, self)
 
         enter_button.enable = self.app.game.is_full_string() and not self.app.game.ended
@@ -93,7 +104,7 @@ class MainScene(Scene):
         self.update_keyboard()
 
         if self.app.game.ended:
-            label.text = self.app.game.current_word
+            label.text = ("Победа!" if self.app.game.win else "Поражение.") + " Слово: " + self.app.game.current_word
             self.render_require = True
         else:
             label.text = "XXXXXX"

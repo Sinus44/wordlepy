@@ -9,8 +9,8 @@ class SceneController:
         self.selected_scene_name = ""
         self.update_clock = pygame.time.Clock()
         self.frame_clock = pygame.time.Clock()
-        self.ups = 100
-        self.fps = 60
+        self.ups = 1
+        self.fps = 75
         self.enable = False
 
     def set_fps(self, new_fps):

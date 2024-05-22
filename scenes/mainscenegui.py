@@ -3,7 +3,8 @@ import gui
 alphabet = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя".upper()
 
 palette = [
-    (20, 20, 20)
+    (20, 20, 20),
+    (255, 255, 255)
 ]
 
 size = (500, 700)
@@ -33,7 +34,7 @@ for i in range(matrix_size[1]):
         btn.style.set_property("normal", "outline_enable", True)
         btn.style.set_property("normal", "font_size", 32)
         btn.style.set_property("normal", "font_bold", True)
-        btn.style.set_property("hovered", "outline_color", (255, 255, 255))
+        btn.style.set_property("hovered", "outline_color", palette[1])
         cells[i].append(btn)
 
 layout.add_elements(*sum(cells, []))
@@ -51,17 +52,17 @@ for i in range(3):
         btn.style.set_property("normal", "outline_enable", True)
         btn.style.set_property("normal", "font_size", 30)
         btn.style.set_property("normal", "outline_width", 1)
-        btn.style.set_property("hovered", "outline_color", (255, 255, 255))
+        btn.style.set_property("hovered", "outline_color", palette[1])
         keyboard[i].append(btn)
 
 layout.add_elements(*sum(keyboard, []))
 
 enter_button = gui.Button()
-enter_button.text = "Подтвердить"
+enter_button.text = "Проверить"
 enter_button.enable = False
-enter_button.size = ((size[0] - margin * 2) / 3, 40)
-enter_button.style.set_property("normal", "outline_enable", True)
-enter_button.style.set_property("normal", "font_size", 20)
+enter_button.size = ((size[0] - margin * 2) / 4, 40)
+enter_button.style.set_property("normal", "outline_enable", False)
+enter_button.style.set_property("normal", "font_size", 18)
 enter_button.style.set_property("normal", "background_color", (52, 179, 72))
 enter_button.style.set_property("hovered", "background_color", (120, 255, 142))
 enter_button.style.set_property("disabled", "background_color", (0, 0, 0))
@@ -70,9 +71,9 @@ enter_button.render()
 delete_button = gui.Button()
 delete_button.text = "Удалить"
 delete_button.enable = False
-delete_button.size = ((size[0] - margin * 2) / 3, 40)
-delete_button.style.set_property("normal", "outline_enable", True)
-delete_button.style.set_property("normal", "font_size", 20)
+delete_button.size = ((size[0] - margin * 2) / 4, 40)
+delete_button.style.set_property("normal", "outline_enable", False)
+delete_button.style.set_property("normal", "font_size", 18)
 delete_button.style.set_property("normal", "background_color", (201, 36, 18))
 delete_button.style.set_property("disabled", "background_color", (0, 0, 0))
 delete_button.style.set_property("hovered", "background_color", (237, 83, 66))
@@ -81,16 +82,25 @@ delete_button.render()
 new_game_button = gui.Button()
 new_game_button.text = "Новая игра"
 new_game_button.position = (size[0] - margin - (size[0] / 2 - margin), 480)
-new_game_button.size = ((size[0] - margin * 2) / 3, 40)
-new_game_button.style.set_property("normal", "font_size", 20)
-new_game_button.style.set_property("normal", "outline_enable", True)
+new_game_button.size = ((size[0] - margin * 2) / 4, 40)
+new_game_button.style.set_property("normal", "font_size", 18)
+new_game_button.style.set_property("normal", "outline_enable", False)
 new_game_button.style.set_property("hovered", "background_color", (120, 120, 120))
-
 new_game_button.render()
+
+menu_button = gui.Button()
+menu_button.text = "Меню"
+menu_button.position = (size[0] - margin - (size[0] / 2 - margin), 480)
+menu_button.size = ((size[0] - margin * 2) / 4, 40)
+menu_button.style.set_property("normal", "font_size", 18)
+menu_button.style.set_property("normal", "outline_enable", False)
+menu_button.style.set_property("hovered", "background_color", (120, 120, 120))
+menu_button.render()
 
 slide = gui.SlidePanel()
 slide.position = (margin, 480)
 slide.size = (size[0] - margin * 2, 40)
+slide.add_child(menu_button)
 slide.add_child(new_game_button)
 slide.add_child(enter_button)
 slide.add_child(delete_button)

@@ -1,7 +1,7 @@
 """
 Simple GUI library
-Version: 0.1.1
-Build Date: 22.05.2024 3:54
+Version: 0.1.2
+Build Date: 23.05.2024 0:24
 """
 
 from .button import *
