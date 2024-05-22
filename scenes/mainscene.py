@@ -1,10 +1,11 @@
 import pygame.event
 
-from scenectrl import Scene
-import keyconverter
-from .mainscenegui import layout, cells, keyboard, enter_button, delete_button, new_game_button
-import colors
 import cellcodes
+import colors
+import keyconverter
+from scenectrl import Scene
+from .mainscenegui import layout, cells, keyboard, enter_button, delete_button, new_game_button
+
 
 class MainScene(Scene):
     def __init__(self, app):
@@ -39,13 +40,17 @@ class MainScene(Scene):
         self.app.game.delete_symbol()
         self.render_require = True
 
-    def get_color_by_state(self, state):
+    @staticmethod
+    def get_color_by_state(state):
         if state == cellcodes.EMPTY:
             return colors.EMPTY
+
         elif state == cellcodes.NO:
             return colors.NO
+
         elif state == cellcodes.IN_WORD:
             return colors.IN_WORD
+
         elif state == cellcodes.POSITION:
             return colors.POSITION
 
@@ -58,7 +63,8 @@ class MainScene(Scene):
     def update_keyboard(self):
         for i, line in enumerate(keyboard):
             for j, key in enumerate(line):
-                key.style.set_property("normal", "background_color", self.get_color_by_state(self.app.game.get_state_keyboard(key.text)))
+                key.style.set_property("normal", "background_color",
+                                       self.get_color_by_state(self.app.game.get_state_keyboard(key.text)))
 
     def draw_tick(self):
         for event in pygame.event.get():
@@ -72,7 +78,11 @@ class MainScene(Scene):
                     self.app.game.delete_symbol()
 
                 elif event.key == pygame.K_RETURN:
-                    self.app.game.enter()
+                    if self.app.game.ended:
+                        self.gui_new_game(None, None)
+
+                    else:
+                        self.app.game.enter()
 
             layout.event(event, self)
 
@@ -85,4 +95,3 @@ class MainScene(Scene):
         layout.draw(self.app.screen, self.render_require)
         self.render_require = False
         pygame.display.update()
-

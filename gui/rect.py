@@ -1,10 +1,12 @@
+import pygame
+
 from .element import Element
 from .style import Style
-import pygame
 
 
 class RectStyle(Style):
     """Style for RECT-Element"""
+
     def __init__(self):
         Style.__init__(self)
 

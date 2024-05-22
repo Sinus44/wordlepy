@@ -1,7 +1,8 @@
-import word_reader
-import cellcodes
-import cell
 import random
+
+import cell
+import cellcodes
+import word_reader
 
 
 class Game:
@@ -78,4 +79,3 @@ class Game:
                 self.current_symbol = 0
             else:
                 self.ended = True
-

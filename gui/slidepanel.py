@@ -1,8 +1,9 @@
 import pygame
+
 from gui.element import Element
-from gui.style import Style
 from gui.rect import Rect
 from gui.rect import RectStyle
+from gui.style import Style
 
 
 class SlidePanelStyle(Style):

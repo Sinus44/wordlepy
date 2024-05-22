@@ -1,5 +1,6 @@
-from .element import Element
 import pygame
+
+from .element import Element
 
 
 class Image(Element):

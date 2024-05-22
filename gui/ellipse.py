@@ -1,7 +1,8 @@
 import pygame
-from .style import Style
+
 from .element import Element
 from .rect import RectStyle
+from .style import Style
 
 
 class EllipseStyle(Style):
@@ -44,4 +45,5 @@ class Ellipse(Element):
         dx = self.size[0] / 2
         dy = self.size[1] / 2
 
-        return (((position[0] - self.position[0] - self.size[0] / 2) ** 2) / (dx ** 2) + ((position[1] - self.position[1] - self.size[1] / 2) ** 2) / (dy ** 2)) < 1
+        return (((position[0] - self.position[0] - self.size[0] / 2) ** 2) / (dx ** 2) + (
+                    (position[1] - self.position[1] - self.size[1] / 2) ** 2) / (dy ** 2)) < 1

@@ -1,9 +1,9 @@
 import pygame
 
-from .style import Style
-from .element import Element
 from .button import Button, ButtonStyle
+from .element import Element
 from .slidepanel import SlidePanel, SlidePanelStyle
+from .style import Style
 
 
 class DropMenuStyle(Style):
@@ -145,7 +145,6 @@ class DropMenu(Element):
         self.__button1.reset()
         self.__slidePanel1.reset()
         self.render()
-
 
     def _on_click(self, event, sender):
         self.opened = not self.opened

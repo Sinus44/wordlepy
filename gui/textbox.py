@@ -1,7 +1,8 @@
-from .element import Element
-from .button import Button, ButtonStyle
-from .style import Style
 import pygame
+
+from .button import Button, ButtonStyle
+from .element import Element
+from .style import Style
 
 
 class TextboxStyle(Style):
@@ -192,5 +193,3 @@ class Textbox(Element):
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_BACKSPACE:
                 self.del_symbol()
-
-

@@ -1,7 +1,7 @@
 import pygame.font
 
-from .style import Style
 from .element import Element
+from .style import Style
 
 pygame.font.init()
 
@@ -102,4 +102,3 @@ class Label(Element):
         rect = rendered.get_rect(**kwargs)
 
         self.surface.blit(rendered, rect)
-

@@ -1,7 +1,8 @@
+import pygame
+
+from game import Game
 from scenectrl import SceneController
 from scenes import MainScene
-from game import Game
-import pygame
 
 
 class App:

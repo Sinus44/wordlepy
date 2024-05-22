@@ -1,4 +1,5 @@
 import pygame
+
 import gui
 
 
@@ -242,5 +243,5 @@ class Element:
         surface.blit(self.surface, self.position)
 
     def collide(self, position):
-        return self.position[0] + self.offset[0] <= position[0] <= self.position[0] + self.offset[0] + self.size[0] and\
-               self.position[1] + self.offset[1] <= position[1] <= self.position[1] + self.offset[1] + self.size[1]
+        return self.position[0] + self.offset[0] <= position[0] <= self.position[0] + self.offset[0] + self.size[0] and \
+            self.position[1] + self.offset[1] <= position[1] <= self.position[1] + self.offset[1] + self.size[1]

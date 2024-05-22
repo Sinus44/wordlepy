@@ -45,7 +45,7 @@ for i in range(3):
     keyboard.append([])
     for j in range(11):
         btn = gui.Button()
-        btn.position = (plane_size[0] / 11 * j + margin,  120 / 3 * i + margin + 500)
+        btn.position = (plane_size[0] / 11 * j + margin, 120 / 3 * i + margin + 500)
         btn.size = (keyboard_button_size, keyboard_button_size)
         btn.text = alphabet[i * 11 + j]
         btn.style.set_property("normal", "outline_enable", True)
@@ -88,7 +88,6 @@ new_game_button.style.set_property("hovered", "background_color", (120, 120, 120
 
 new_game_button.render()
 
-
 slide = gui.SlidePanel()
 slide.position = (margin, 480)
 slide.size = (size[0] - margin * 2, 40)
@@ -97,4 +96,3 @@ slide.add_child(enter_button)
 slide.add_child(delete_button)
 
 layout.add_element(slide)
-

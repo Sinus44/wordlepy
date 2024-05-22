@@ -98,7 +98,7 @@ class Style:
     def copy_style_by_map(self, from_style, copy_map):
         for property_name in copy_map:
             if property_name not in from_style._properties["normal"]:
-                #print(f": {} который есть в map не найден в ")
+                # print(f": {} который есть в map не найден в ")
                 raise Exception(f"При создании стиля \"{type(self).__name__}\" в карте копирования из стиля "
                                 f"\"{type(from_style).__name__}\" произошла ошибка: параметр \"{property_name}\" не был"
                                 f" обнаружен")
@@ -110,7 +110,7 @@ class Style:
                 print(f"[WARNING] Из стиля \"{type(self).__name__}\" не передается параметр \"{property_name}\" в "
                       f"\"{type(from_style).__name__}\"")
 
-        #for property_name in from_style._properties["normal"]:
+        # for property_name in from_style._properties["normal"]:
         #    if property_name not in copy_map:
         #        print(f"Не удалось обнаружить свойство \"{property_name}\" из стиля "
         #                        f"\"{type(self).__name__}\" в стиль \"{type(from_style).__name__}\", возможно вы не "
