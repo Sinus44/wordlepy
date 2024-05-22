@@ -4,7 +4,7 @@ import cellcodes
 import colors
 import keyconverter
 from scenectrl import Scene
-from .mainscenegui import layout, cells, keyboard, enter_button, delete_button, new_game_button
+from .mainscenegui import layout, cells, keyboard, enter_button, delete_button, new_game_button, label
 
 
 class MainScene(Scene):
@@ -91,6 +91,12 @@ class MainScene(Scene):
 
         self.copy_plane()
         self.update_keyboard()
+
+        if self.app.game.ended:
+            label.text = self.app.game.current_word
+            self.render_require = True
+        else:
+            label.text = "XXXXXX"
 
         layout.draw(self.app.screen, self.render_require)
         self.render_require = False

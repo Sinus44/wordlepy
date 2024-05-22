@@ -96,3 +96,11 @@ slide.add_child(enter_button)
 slide.add_child(delete_button)
 
 layout.add_element(slide)
+
+label = gui.Label()
+label.text = "XXXXXX"
+label.position = (0, 0)
+label.size = (size[0], margin)
+label.style.set_property("normal", "font_size", 25)
+label.render()
+layout.add_element(label)
