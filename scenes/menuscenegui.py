@@ -62,7 +62,7 @@ layout.add_element(title)
 
 title_bottom = gui.Label()
 title_bottom.position = (0, size[1] - ph * 5)
-title_bottom.text = "v1.2.0 Sinus44"
+title_bottom.text = "v1.3.0 pre 2 Sinus44"
 title_bottom.size = down_background.size
 title_bottom.style.set_property("normal", "horizontal_align", "left")
 title_bottom.style.set_property("normal", "font_size", int(ph * 6))
@@ -74,6 +74,7 @@ layout.add_element(title_bottom)
 btn_style = gui.ButtonStyle()
 btn_style.set_property("normal", "background_color", palette[5])
 btn_style.set_property("hovered", "background_color", palette[1])
+btn_style.set_property("disabled", "background_color", palette[0])
 btn_style.set_property("normal", "font_size", 25)
 
 btn_size = (60 * pw, 10 * ph)
@@ -93,6 +94,7 @@ history_button.position = (half_size[0] - btn_size[0] / 2, half_size[1] / 4 + bt
 history_button.size = btn_size
 history_button.text = "HISTORY"
 history_button.style = btn_style
+history_button.enable = False
 history_button.render()
 layout.add_element(history_button)
 
@@ -101,6 +103,7 @@ settings_button.position = (half_size[0] - btn_size[0] / 2, half_size[1] / 4 + b
 settings_button.size = btn_size
 settings_button.text = "SETTINGS"
 settings_button.style = btn_style
+settings_button.enable = False
 settings_button.render()
 layout.add_element(settings_button)
 
@@ -109,6 +112,7 @@ about_button.position = (half_size[0] - btn_size[0] / 2, half_size[1] / 4 + btn_
 about_button.size = btn_size
 about_button.text = "ABOUT"
 about_button.style = btn_style
+about_button.enable = False
 about_button.render()
 layout.add_element(about_button)
 

@@ -2,7 +2,7 @@ import pygame
 
 from game import Game
 from scenectrl import SceneController
-from scenes import MainScene, MenuScene
+from scenes import MainScene, MenuScene, HistoryScene
 
 
 class WordleGame:
@@ -12,7 +12,8 @@ class WordleGame:
         self.scene_controller = SceneController()
         self.scene_controller.add_scenes({
             "main": MainScene(self),
-            "menu": MenuScene(self)
+            "menu": MenuScene(self),
+            "history": HistoryScene(self)
         })
         pygame.display.set_icon(pygame.transform.scale(pygame.image.load("logo.png"), (64, 64)))
         pygame.display.set_caption("WORDLE by Sinus44")
