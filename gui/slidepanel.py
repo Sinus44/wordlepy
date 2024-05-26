@@ -141,6 +141,9 @@ class SlidePanel(Element):
         self.child.append(element)
         self.calculate_position()
 
+    def clear_child(self):
+        self.child = []
+
     def calculate_position(self):
         sum_width = sum([elem.size[0] for elem in self.child])
         sum_height = sum([elem.size[1] for elem in self.child])

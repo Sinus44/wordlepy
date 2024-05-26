@@ -62,7 +62,7 @@ layout.add_element(title)
 
 title_bottom = gui.Label()
 title_bottom.position = (0, size[1] - ph * 5)
-title_bottom.text = "v1.3.0 pre 2 Sinus44"
+title_bottom.text = "v1.3.0 pre 3 Sinus44"
 title_bottom.size = down_background.size
 title_bottom.style.set_property("normal", "horizontal_align", "left")
 title_bottom.style.set_property("normal", "font_size", int(ph * 6))
@@ -94,7 +94,7 @@ history_button.position = (half_size[0] - btn_size[0] / 2, half_size[1] / 4 + bt
 history_button.size = btn_size
 history_button.text = "HISTORY"
 history_button.style = btn_style
-history_button.enable = False
+history_button.enable = True
 history_button.render()
 layout.add_element(history_button)
 

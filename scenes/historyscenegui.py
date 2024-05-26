@@ -49,6 +49,7 @@ layout.add_element(title)
 btn_style = gui.ButtonStyle()
 btn_style.set_property("normal", "background_color", palette[5])
 btn_style.set_property("hovered", "background_color", palette[1])
+btn_style.set_property("disabled", "background_color", palette[0])
 btn_style.set_property("normal", "font_size", 25)
 
 btn_size = (60 * pw, 10 * ph)
@@ -72,6 +73,15 @@ layout.add_element(clear_button)
 
 slide = gui.SlidePanel()
 slide.position = (0, 10 * ph)
-slide.size = (100 * pw, 90 * ph)
+slide.size = (100 * pw, 80 * ph)
 slide.style.set_property("normal", "align", "vertical")
 layout.add_element(slide)
+
+show_button = gui.Button()
+show_button.position = (35 * pw, 92.5 * ph)
+show_button.size = (30 * pw, 5 * ph)
+show_button.text = "SHOW"
+show_button.enable = False
+show_button.style = copy.deepcopy(btn_style)
+show_button.render()
+layout.add_element(show_button)

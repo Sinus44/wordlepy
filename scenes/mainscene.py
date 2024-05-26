@@ -105,10 +105,9 @@ class MainScene(Scene):
 
         if self.app.game.ended:
             label.text = ("Победа!" if self.app.game.win else "Поражение.") + " Слово: " + self.app.game.current_word
-            self.render_require = True
+            label.render()
         else:
             label.text = "XXXXXX"
 
         layout.draw(self.app.screen, self.render_require)
-        self.render_require = False
         pygame.display.update()

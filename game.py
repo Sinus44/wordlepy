@@ -2,6 +2,7 @@ import random
 
 import cell
 import cellcodes
+import history
 import word_reader
 
 
@@ -26,7 +27,7 @@ class Game:
         self.current_symbol = 0
         self.words = word_reader.read_words(self.words_path, self.words_size)
         self.current_word = random.choice(self.words).upper()
-        self.plane = [[cell.Cell() for j in range(self.words_size)] for i in range(self.attempt_count)]
+        self.plane = [[cell.Cell() for _ in range(self.words_size)] for _ in range(self.attempt_count)]
 
     def add_symbol(self, symbol):
         if self.current_symbol < self.words_size:
@@ -66,8 +67,8 @@ class Game:
                 cel.type = cellcodes.POSITION
 
         if self.get_text() == self.current_word:
-            self.ended = True
             self.win = True
+            self.end()
 
         return self.ended
 
@@ -80,5 +81,9 @@ class Game:
                 self.current_attempt += 1
                 self.current_symbol = 0
             else:
-                self.ended = True
                 self.win = False
+                self.end()
+
+    def end(self):
+        self.ended = True
+        history.History.add_game(self)

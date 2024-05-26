@@ -18,8 +18,20 @@ class History:
             file.write(raw)
 
     @staticmethod
-    def clear(games):
-        ...
+    def clear():
+        History.save([])
+
+    @staticmethod
+    def add_game(game):
+        game_dict = {
+            "win": game.win,
+            "word": game.current_word,
+            "field": [[(cell.char, cell.type) for cell in line] for line in game.plane]
+        }
+
+        games = History.load()
+        games.append(game_dict)
+        History.save(games)
 
 
 if __name__ == "__main__":

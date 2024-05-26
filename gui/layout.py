@@ -10,7 +10,6 @@ class Layout:
         for element in args:
             self.add_element(element)
 
-
     def reset(self):
         for element in self.children:
             element.reset()

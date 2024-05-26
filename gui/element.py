@@ -151,6 +151,24 @@ class Element:
 
     # endregion
 
+    # region Style property
+
+    @property
+    def userdata(self):
+        return self.__userdata
+
+    @userdata.setter
+    def userdata(self, value):
+        self.__userdata = value
+        for handler in self.prop_userdata_set_handlers:
+            handler(self, None)
+
+    @userdata.deleter
+    def userdata(self):
+        del self.__userdata
+
+    # endregion
+
     # endregion
 
     def __init__(self):
@@ -160,6 +178,7 @@ class Element:
         self.__offset = (0, 0)
         self.__size = (100, 100)
         self.__style = gui.Style()
+        self.__userdata = {}
 
         self.__hovered = False
         self.__enable = True
@@ -181,6 +200,7 @@ class Element:
         self.prop_position_set_handlers = []
         self.prop_offset_set_handlers = []
         self.prop_size_set_handlers = []
+        self.prop_userdata_set_handlers = []
 
     def update_style_state(self):
         if not self.enable:
