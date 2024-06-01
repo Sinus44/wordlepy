@@ -10,3 +10,4 @@ class Image(Element):
 
     def render(self):
         self.surface = pygame.transform.scale(pygame.image.load(self.image_path), self.size)
+        self._post_render()

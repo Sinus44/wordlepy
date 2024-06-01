@@ -1,23 +1,13 @@
 import copy
 
 import gui
+from .palette import palette
 
 # Layout
 # Test layout
 # layout = layout
 # Final layout
 layout = gui.Layout()
-
-palette = [
-    (20, 20, 20),  # 0. Empty cell color / background 1
-    (120, 120, 120),  # 1. No cell color / button hovered
-    (230, 217, 80),  # 2. IN word cell color / yellow
-    (110, 250, 132),  # 3. Position cell color / green
-    (40, 40, 40),  # 4. background 2
-    (70, 70, 70),  # 5. button background
-    (201, 36, 18),  # 6. remove button back / red
-    (237, 83, 66),  # 7. remove button hovered / light red
-]
 
 EMPTY = palette[0]
 NO = palette[1]

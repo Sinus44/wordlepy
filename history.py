@@ -32,17 +32,3 @@ class History:
         games = History.load()
         games.append(game_dict)
         History.save(games)
-
-
-if __name__ == "__main__":
-    History.save(
-        [
-            {
-                "win": True,
-                "word": "КРУЖКА",
-                "field": [("К", 4), ("Р", 4), ("У", 4), ("Ж", 4), ("К", 4), ("А", 4)]
-            }
-        ]
-    )
-
-    print(History.load())

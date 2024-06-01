@@ -15,9 +15,10 @@ class Element:
 
     @hovered.setter
     def hovered(self, value):
-        self.__hovered = value
-        for handler in self.prop_hovered_set_handlers:
-            handler(self, None)
+        if value != self.__hovered:
+            self.__hovered = value
+            for handler in self.prop_hovered_set_handlers:
+                handler(self, None)
 
     @hovered.deleter
     def hovered(self):
@@ -33,9 +34,10 @@ class Element:
 
     @visible.setter
     def visible(self, value):
-        self.__visible = value
-        for handler in self.prop_enable_set_handlers:
-            handler(self, None)
+        if value != self.__visible:
+            self.__visible = value
+            for handler in self.prop_enable_set_handlers:
+                handler(self, None)
 
     @visible.deleter
     def visible(self):
@@ -51,9 +53,10 @@ class Element:
 
     @enable.setter
     def enable(self, value):
-        self.__enable = value
-        for handler in self.prop_enable_set_handlers:
-            handler(self, None)
+        if value != self.__enable:
+            self.__enable = value
+            for handler in self.prop_enable_set_handlers:
+                handler(self, None)
 
     @enable.deleter
     def enable(self):
@@ -69,9 +72,10 @@ class Element:
 
     @active.setter
     def active(self, value):
-        self.__active = value
-        for handler in self.prop_active_set_handlers:
-            handler(self, None)
+        if value != self.__active:
+            self.__active = value
+            for handler in self.prop_active_set_handlers:
+                handler(self, None)
 
     @active.deleter
     def active(self):
@@ -87,9 +91,10 @@ class Element:
 
     @position.setter
     def position(self, value):
-        self.__position = value
-        for handler in self.prop_position_set_handlers:
-            handler(None, self)
+        if value != self.__position:
+            self.__position = value
+            for handler in self.prop_position_set_handlers:
+                handler(None, self)
 
     @position.deleter
     def position(self):
@@ -105,9 +110,10 @@ class Element:
 
     @offset.setter
     def offset(self, value):
-        self.__offset = value
-        for handler in self.prop_offset_set_handlers:
-            handler(None, self)
+        if value != self.__offset:
+            self.__offset = value
+            for handler in self.prop_offset_set_handlers:
+                handler(None, self)
 
     @offset.deleter
     def offset(self):
@@ -123,9 +129,10 @@ class Element:
 
     @size.setter
     def size(self, value):
-        self.__size = value
-        for handler in self.prop_size_set_handlers:
-            handler(self, None)
+        if value != self.__size:
+            self.__size = value
+            for handler in self.prop_size_set_handlers:
+                handler(self, None)
 
     @size.deleter
     def size(self):
@@ -141,9 +148,10 @@ class Element:
 
     @style.setter
     def style(self, value):
-        self.__style = value
-        for handler in self.prop_style_set_handlers:
-            handler(self, None)
+        if value != self.__style:
+            self.__style = value
+            for handler in self.prop_style_set_handlers:
+                handler(self, None)
 
     @style.deleter
     def style(self):
@@ -151,7 +159,7 @@ class Element:
 
     # endregion
 
-    # region Style property
+    # region Userdata property
 
     @property
     def userdata(self):
@@ -159,9 +167,10 @@ class Element:
 
     @userdata.setter
     def userdata(self, value):
-        self.__userdata = value
-        for handler in self.prop_userdata_set_handlers:
-            handler(self, None)
+        if value != self.__userdata:
+            self.__userdata = value
+            for handler in self.prop_userdata_set_handlers:
+                handler(self, None)
 
     @userdata.deleter
     def userdata(self):
@@ -176,7 +185,7 @@ class Element:
 
         self.__position = (0, 0)
         self.__offset = (0, 0)
-        self.__size = (100, 100)
+        self.__size = [100, 100]
         self.__style = gui.Style()
         self.__userdata = {}
 
@@ -188,19 +197,30 @@ class Element:
         # endregion
 
         self.surface = None
+        self.render_required = True
 
         self.event_handlers = []
         self.on_click_handlers = []
         self.on_miss_click_handlers = []
+        self.post_render_handlers = []
 
         self.prop_style_set_handlers = []
         self.prop_enable_set_handlers = []
         self.prop_hovered_set_handlers = []
         self.prop_active_set_handlers = []
-        self.prop_position_set_handlers = []
+        self.prop_position_set_handlers = [self.request_render]
         self.prop_offset_set_handlers = []
-        self.prop_size_set_handlers = []
+        self.prop_size_set_handlers = [self.request_render]
         self.prop_userdata_set_handlers = []
+
+    def request_render(self, event=None, sender=None):
+        self.render_required = True
+
+    def _post_render(self):
+        self.render_required = False
+        for handler in self.post_render_handlers:
+            if handler(None, self):
+                return
 
     def update_style_state(self):
         if not self.enable:
@@ -252,12 +272,13 @@ class Element:
     def render(self):
         self.surface = pygame.Surface(self.size)
         self.update_style_state()
+        self._post_render()
 
     def draw(self, surface, auto_render=False):
         if not self.visible:
             return
 
-        if auto_render:
+        if auto_render or self.render_required:
             self.render()
 
         surface.blit(self.surface, self.position)

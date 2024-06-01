@@ -52,9 +52,10 @@ class DropMenu(Element):
 
     @opened.setter
     def opened(self, value):
-        self.__opened = value
-        for handler in self.prop_opened_set_handlers:
-            handler(None, self)
+        if value != self.__opened:
+            self.__opened = value
+            for handler in self.prop_opened_set_handlers:
+                handler(None, self)
 
     @opened.deleter
     def opened(self):
@@ -70,9 +71,10 @@ class DropMenu(Element):
 
     @text.setter
     def text(self, value):
-        self.__text = value
-        for handler in self.prop_text_set_handlers:
-            handler(None, self)
+        if value != self.__text:
+            self.__text = value
+            for handler in self.prop_text_set_handlers:
+                handler(None, self)
 
     @text.deleter
     def text(self):
@@ -88,6 +90,9 @@ class DropMenu(Element):
 
     @opened_size.setter
     def opened_size(self, value):
+        if value == self.__opened_size:
+            return
+
         self.__opened_size = value
         for handler in self.prop_opened_size_set_handlers:
             handler(None, self)
@@ -132,34 +137,32 @@ class DropMenu(Element):
 
         self.event_handlers.append(self.__button1._event)
         self.event_handlers.append(self.__slidePanel1._event)
-        self.event_handlers.append(lambda event, sender: self.render())
+        self.event_handlers.append(self.request_render())
         self.__button1.on_click_handlers.append(self._on_click)
 
         # endregion
-
-        self.render()
 
     def reset(self):
         self.hovered = False
         self.opened = False
         self.__button1.reset()
         self.__slidePanel1.reset()
-        self.render()
+        self.request_render()
 
     def _on_click(self, event, sender):
         self.opened = not self.opened
-        self.render()
+        self.request_render()
 
     def add_child(self, element):
         self.__slidePanel1.add_child(element)
 
     def render(self):
-        self.surface = pygame.Surface((self.size[0] + self.opened_size[0], self.size[1] + self.opened_size[1]),
+        self.surface = pygame.Surface([self.size[0] + self.opened_size[0], self.size[1] + self.opened_size[1]],
                                       pygame.SRCALPHA)
         self.update_style_state()
 
         if self.enable and self.opened:
-            self.style.set_state("opened")
+            self.style.state = "opened"
 
         self.__button1.text = self.text
         self.__button1.position = self.position
@@ -175,3 +178,5 @@ class DropMenu(Element):
 
         self.__button1.draw(self.surface, True)
         self.__slidePanel1.draw(self.surface, True)
+
+        self._post_render()

@@ -30,20 +30,20 @@ class Ellipse(Element):
 
         # endregion
 
-        self.render()
-
     def render(self):
         self.surface = pygame.Surface(self.size, pygame.SRCALPHA)
         self.update_style_state()
 
-        pygame.draw.ellipse(self.surface, self.style.get_property("color"), (0, 0, *self.size))
+        pygame.draw.ellipse(self.surface, self.style.get_property("color"), [0, 0, *self.size])
         if self.style.get_property("outline_enable"):
-            pygame.draw.ellipse(self.surface, self.style.get_property("outline_color"), (0, 0, *self.size),
+            pygame.draw.ellipse(self.surface, self.style.get_property("outline_color"), [0, 0, *self.size],
                                 self.style.get_property("outline_width"))
+
+        self._post_render()
 
     def collide(self, position):
         dx = self.size[0] / 2
         dy = self.size[1] / 2
 
         return (((position[0] - self.position[0] - self.size[0] / 2) ** 2) / (dx ** 2) + (
-                    (position[1] - self.position[1] - self.size[1] / 2) ** 2) / (dy ** 2)) < 1
+                (position[1] - self.position[1] - self.size[1] / 2) ** 2) / (dy ** 2)) < 1

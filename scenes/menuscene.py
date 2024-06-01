@@ -1,5 +1,3 @@
-import pygame.event
-
 from scenectrl import Scene
 from .menuscenegui import layout, start_button, exit_button, history_button
 
@@ -21,12 +19,8 @@ class MenuScene(Scene):
     def start_button_click(self, event, sender):
         self.app.scene_controller.select_scene("main")
 
+    def event(self, event):
+        layout.event(event, self)
+
     def draw_tick(self):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                self.app.stop()
-
-            layout.event(event, self)
-
         layout.draw(self.app.screen)
-        pygame.display.update()

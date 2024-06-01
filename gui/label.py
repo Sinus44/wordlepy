@@ -23,7 +23,6 @@ class LabelStyle(Style):
 
 class Label(Element):
     # region Properties
-
     # region Text property
 
     @property
@@ -32,6 +31,9 @@ class Label(Element):
 
     @text.setter
     def text(self, value):
+        if value == self.__text:
+            return
+
         self.__text = value
         for handler in self.prop_text_set_handlers:
             handler(None, self)
@@ -41,7 +43,6 @@ class Label(Element):
         del self.__text
 
     # endregion
-
     # endregion
 
     def __init__(self):
@@ -50,17 +51,18 @@ class Label(Element):
         self.prop_text_set_handlers = []
 
         # region Properties
-
         self.__text = "Label"
         self.style = LabelStyle()
-
         # endregion
 
-        self.render()
+        self.prop_text_set_handlers.append(self.request_render)
+        self.style.change_handlers.append(self.request_render)
 
     def render(self):
+
         self.surface = pygame.Surface(self.size, pygame.SRCALPHA)
         self.update_style_state()
+
         font = pygame.font.SysFont(self.style.get_property("font_name"), self.style.get_property("font_size"),
                                    self.style.get_property("font_bold"), self.style.get_property("font_italic"))
 
@@ -77,7 +79,7 @@ class Label(Element):
         else:
             height = min(self.size[1], rendered.get_height())
 
-        rendered = pygame.transform.scale(rendered, (width, height))
+        rendered = pygame.transform.scale(rendered, [width, height])
 
         kwargs = {}
 
@@ -100,5 +102,7 @@ class Label(Element):
             kwargs["centery"] = self.size[1] / 2
 
         rect = rendered.get_rect(**kwargs)
+        rect.y += 2
 
         self.surface.blit(rendered, rect)
+        self._post_render()

@@ -34,7 +34,6 @@ class TextboxStyle(Style):
 
 class Textbox(Element):
     # region Properties
-
     # region Text property
 
     @property
@@ -43,6 +42,9 @@ class Textbox(Element):
 
     @text.setter
     def text(self, value):
+        if self.__text == value:
+            return
+
         self.__text = value
         for handler in self.prop_text_set_handlers:
             handler(None, self)
@@ -61,6 +63,9 @@ class Textbox(Element):
 
     @hint.setter
     def hint(self, value):
+        if self.__hint == value:
+            return
+
         self.__hint = value
         for handler in self.prop_hint_set_handlers:
             handler(None, self)
@@ -79,6 +84,9 @@ class Textbox(Element):
 
     @max_length.setter
     def max_length(self, value):
+        if self.__max_length == value:
+            return
+
         self.__max_length = value
         for handler in self.prop_max_length_set_handlers:
             handler(None, self)
@@ -97,6 +105,9 @@ class Textbox(Element):
 
     @alphabet.setter
     def alphabet(self, value):
+        if self.__alphabet == value:
+            return
+
         self.__alphabet = value
         for handler in self.prop_alphabet_set_handlers:
             handler(None, self)
@@ -106,7 +117,6 @@ class Textbox(Element):
         del self.__alphabet
 
     # endregion
-
     # endregion
 
     def __init__(self):
@@ -142,10 +152,9 @@ class Textbox(Element):
         self.event_handlers.append(self.__event)
         self.on_click_handlers.append(self.__click_event)
         self.on_miss_click_handlers.append(self.__miss_click_event)
+        self.style.change_handlers.append(self.request_render)
 
         # endregion
-
-        self.render()
 
     def reset(self):
         self.hovered = False
@@ -167,24 +176,25 @@ class Textbox(Element):
         self.__button1.style.copy_property_by_map(self.style, self.style.COPY_MAP["button"])
 
         self.__button1.draw(self.surface, True)
+        self._post_render()
 
     def __click_event(self, event, sender):
         self.active = True
-        self.render()
+        self.request_render()
 
     def __miss_click_event(self, event, sender):
         self.active = False
-        self.render()
+        self.request_render()
 
     def add_symbol(self, symbol):
         if self.active and (self.alphabet is None or symbol in self.alphabet) and len(self.text) < self.max_length:
             self.text += symbol
-            self.render()
+            self.request_render()
 
     def del_symbol(self):
         if self.active:
             self.text = self.text[:-1]
-            self.render()
+            self.request_render()
 
     def __event(self, event, sender):
         if event.type == pygame.TEXTINPUT:

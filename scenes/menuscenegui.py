@@ -1,28 +1,13 @@
 import copy
 
 import gui
+from .palette import palette
 
 # Layout
 # Test layout
 # layout = layout
 # Final layout
 layout = gui.Layout()
-
-palette = [
-    (20, 20, 20),  # 0. Empty cell color / background 1
-    (120, 120, 120),  # 1. No cell color / button hovered
-    (230, 217, 80),  # 2. IN word cell color / yellow
-    (110, 250, 132),  # 3. Position cell color / green
-    (40, 40, 40),  # 4. background 2
-    (70, 70, 70),  # 5. button background
-    (201, 36, 18),  # 6. remove button back / red
-    (237, 83, 66),  # 7. remove button hovered / light red
-]
-
-EMPTY = palette[0]
-NO = palette[1]
-IN_WORD = palette[2]
-POSITION = palette[3]
 
 # Size
 size = (500, 700)
@@ -62,7 +47,7 @@ layout.add_element(title)
 
 title_bottom = gui.Label()
 title_bottom.position = (0, size[1] - ph * 5)
-title_bottom.text = "v1.3.0 pre 3 Sinus44"
+title_bottom.text = "v1.3.0 pre 4 Sinus44"
 title_bottom.size = down_background.size
 title_bottom.style.set_property("normal", "horizontal_align", "left")
 title_bottom.style.set_property("normal", "font_size", int(ph * 6))

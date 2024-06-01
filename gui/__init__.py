@@ -1,7 +1,7 @@
 """
-Simple GUI library
+Simple GUI library (SGUIL)
 Version: 0.1.4
-Build Date: 26.05.2024 02:22
+Build Date: 1.06.2024 03:53
 """
 
 from .button import *

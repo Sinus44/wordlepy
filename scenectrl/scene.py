@@ -6,6 +6,9 @@ class Scene:
         self.app = app
         self.layout = gui.Layout()
 
+    def event(self, event):
+        ...
+
     def update_tick(self):
         ...
 

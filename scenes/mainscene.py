@@ -19,30 +19,27 @@ class MainScene(Scene):
         enter_button.on_click_handlers.append(self.gui_enter_press)
         new_game_button.on_click_handlers.append(self.gui_new_game)
         menu_button.on_click_handlers.append(self.gui_menu)
-        self.render_require = False
 
     def gui_menu(self, event, sender):
         self.app.scene_controller.select_scene("menu")
 
     def gui_new_game(self, event, sender):
         self.app.game.start()
-        self.render_require = True
 
     def keyboard_key_press(self, key_code):
         pressed_char = keyconverter.convert_code_to_char(key_code)
         if pressed_char is not None:
             self.app.game.add_symbol(pressed_char)
+            return True
 
     def gui_enter_press(self, event, sender):
         self.app.game.enter()
 
     def gui_keyboard_press(self, event, sender):
         self.app.game.add_symbol(sender.text)
-        self.render_require = True
 
     def gui_keyboard_delete_symbol(self, event, sender):
         self.app.game.delete_symbol()
-        self.render_require = True
 
     @staticmethod
     def get_color_by_state(state):
@@ -61,42 +58,39 @@ class MainScene(Scene):
     def copy_plane(self):
         for i, line in enumerate(self.app.game.plane):
             for j, cell in enumerate(line):
-                cells[i][j].text = cell.char
                 cells[i][j].style.set_property("normal", "background_color", self.get_color_by_state(cell.type))
+                cells[i][j].text = cell.char
 
     def update_keyboard(self):
         for i, line in enumerate(keyboard):
             for j, key in enumerate(line):
                 key.style.set_property("normal", "background_color",
                                        self.get_color_by_state(self.app.game.get_state_keyboard(key.text)))
+                # key.render()
 
     def select(self):
         layout.reset()
-        layout.render()
 
-    def draw_tick(self):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                self.app.stop()
+    def event(self, event):
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_BACKSPACE:
+                self.app.game.delete_symbol()
 
-            if event.type == pygame.KEYDOWN:
+            elif event.key == pygame.K_RETURN:
+                if self.app.game.ended:
+                    self.gui_new_game(None, None)
+                else:
+                    self.app.game.enter()
+
+            elif event.key == pygame.K_ESCAPE:
+                self.gui_menu(None, None)
+
+            else:
                 self.keyboard_key_press(event.scancode)
 
-                if event.key == pygame.K_BACKSPACE:
-                    self.app.game.delete_symbol()
+        layout.event(event, self)
 
-                elif event.key == pygame.K_RETURN:
-                    if self.app.game.ended:
-                        self.gui_new_game(None, None)
-
-                    else:
-                        self.app.game.enter()
-
-                elif event.key == pygame.K_ESCAPE:
-                    self.gui_menu(None, None)
-
-            layout.event(event, self)
-
+    def draw_tick(self):
         enter_button.enable = self.app.game.is_full_string() and not self.app.game.ended
         delete_button.enable = not self.app.game.ended and len(self.app.game.get_text()) > 0
 
@@ -105,9 +99,8 @@ class MainScene(Scene):
 
         if self.app.game.ended:
             label.text = ("Победа!" if self.app.game.win else "Поражение.") + " Слово: " + self.app.game.current_word
-            label.render()
+            # label.render()
         else:
             label.text = "XXXXXX"
 
-        layout.draw(self.app.screen, self.render_require)
-        pygame.display.update()
+        layout.draw(self.app.screen)

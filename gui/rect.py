@@ -21,12 +21,12 @@ class Rect(Element):
         Element.__init__(self)
 
         # region Properties
-
         self.style = RectStyle()
-
         # endregion
 
-        self.render()
+        # region Bind handlers
+        self.style.change_handlers.append(self.request_render)
+        # endregion
 
     def render(self):
         self.surface = pygame.Surface(self.size)
@@ -34,5 +34,7 @@ class Rect(Element):
         self.surface.fill(self.style.get_property("color"))
 
         if self.style.get_property("outline_enable"):
-            pygame.draw.rect(self.surface, self.style.get_property("outline_color"), (0, 0, *self.size),
+            pygame.draw.rect(self.surface, self.style.get_property("outline_color"), [0, 0, self.size[0], self.size[1]],
                              self.style.get_property("outline_width"))
+
+        self._post_render()

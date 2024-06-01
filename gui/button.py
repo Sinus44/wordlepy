@@ -48,6 +48,9 @@ class Button(Element):
 
     @text.setter
     def text(self, value):
+        if value == self.__text:
+            return
+
         self.__text = value
         for handler in self.prop_text_set_handlers:
             handler(None, self)
@@ -83,9 +86,11 @@ class Button(Element):
 
         # endregion
 
-        self.prop_hovered_set_handlers.append(lambda event, sender: self.render())
+        # binds
 
-        self.render()
+        self.prop_hovered_set_handlers.append(self.request_render)
+        self.prop_text_set_handlers.append(self.request_render)
+        self.style.change_handlers.append(self.request_render)
 
     def render(self):
         self.surface = pygame.Surface(self.size)
@@ -99,4 +104,6 @@ class Button(Element):
         self.__label1.style.copy_property_by_map(self.style, self.style.COPY_MAP["label"])
 
         self.__rect1.draw(self.surface, True)
-        self.__label1.draw(self.surface, True)
+        self.__label1.draw(self.surface, False)
+
+        self._post_render()

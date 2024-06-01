@@ -1,5 +1,3 @@
-import pygame
-
 import gui
 import history
 from scenectrl import Scene
@@ -42,12 +40,8 @@ class HistoryScene(Scene):
 
         layout.render()
 
+    def event(self, event):
+        layout.event(event, self)
+
     def draw_tick(self):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                self.app.stop()
-
-            layout.event(event, self)
-
         layout.draw(self.app.screen)
-        pygame.display.update()
