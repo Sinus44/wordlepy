@@ -1,4 +1,0 @@
-EMPTY = 0
-NO = 1
-IN_WORD = 2
-POSITION = 4
