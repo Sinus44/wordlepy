@@ -9,7 +9,7 @@ import src.storage.word_reader as word_reader
 
 class Game:
     def __init__(self):
-        self.words_path = "resources/words.txt"
+        self.words_path = "../resources/words.txt"
         self.words_size = 6
         self.attempt_count = 5
         self.current_attempt = 0

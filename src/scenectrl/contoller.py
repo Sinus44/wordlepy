@@ -75,7 +75,7 @@ class PGSceneController:
         self.fps = 75
         self.enable = False
         self.global_event_handlers = []
-        self.print_fps = True
+        self.print_fps = False
 
     def add_global_event_handler(self, handler):
         self.global_event_handlers.append(handler)

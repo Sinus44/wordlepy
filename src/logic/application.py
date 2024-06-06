@@ -16,7 +16,7 @@ class WordleGame:
             "history": HistoryScene(self)
         })
         self.scene_controller.add_global_event_handler(self.global_event_handler)
-        pygame.display.set_icon(pygame.transform.scale(pygame.image.load("resources/logo.png"), [64, 64]))
+        pygame.display.set_icon(pygame.transform.scale(pygame.image.load("../resources/logo.png"), [64, 64]))
         pygame.display.set_caption("WORDLE by Sinus44")
         self.game = Game()
 

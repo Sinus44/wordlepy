@@ -3,7 +3,7 @@ import os
 
 
 class History:
-    FILE_PATH = "resources/history.json"
+    FILE_PATH = "../resources/history.json"
 
     @staticmethod
     def load():
