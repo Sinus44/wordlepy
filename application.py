@@ -2,7 +2,7 @@ import pygame
 
 from game import Game
 from scenectrl import PGSceneController
-from scenes import MainScene, MenuScene, HistoryScene
+from scenes import MainScene, MenuScene, HistoryScene, ViewGameScene, SettingsScene
 
 
 class WordleGame:
@@ -10,13 +10,17 @@ class WordleGame:
         self.size = [500, 700]
         self.screen = pygame.display.set_mode(self.size)
         self.scene_controller = PGSceneController()
+        self.view_game = None
         self.scene_controller.add_scenes({
             "main": MainScene(self),
             "menu": MenuScene(self),
-            "history": HistoryScene(self)
+            "history": HistoryScene(self),
+            "viewgame": ViewGameScene(self),
+            "settings": SettingsScene(self)
         })
+
         self.scene_controller.add_global_event_handler(self.global_event_handler)
-        pygame.display.set_icon(pygame.transform.scale(pygame.image.load("logo.png"), [64, 64]))
+        pygame.display.set_icon(pygame.transform.scale(pygame.image.load("assets/logo.png"), [64, 64]))
         pygame.display.set_caption("WORDLE by Sinus44")
         self.game = Game()
 

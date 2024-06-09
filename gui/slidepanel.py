@@ -21,6 +21,7 @@ class SlidePanelStyle(Style):
         self.copy_style_by_map(RectStyle(), self.COPY_MAP["rect"])
         self.create_property("normal", "align", "horizontal")
 
+
 class SlidePanel(Element):
     # region Properties
     # region Child property
@@ -75,6 +76,10 @@ class SlidePanel(Element):
         self.__slide_position = 0
         self.style = SlidePanelStyle()
         self.__child_surface = pygame.Surface([0, 0])
+        self.__width = 0
+        self.__height = 0
+        self.__sum_width = 0
+        self.__sum_height = 0
 
         # endregion
 
@@ -111,7 +116,6 @@ class SlidePanel(Element):
 
     def reset(self):
         self.hovered = False
-        self.slide_position = 0
         for child in self.child:
             child.reset()
 
@@ -119,11 +123,12 @@ class SlidePanel(Element):
         if event.type == pygame.MOUSEWHEEL:
             if self.collide(pygame.mouse.get_pos()):
                 if self.style.get_property("align") == "vertical":
-                    self.slide_position = max(0, min(1, self.slide_position - event.precise_y / 25))
+                    self.slide_position = max(0, min(self.__sum_height - self.size[1],
+                                                     self.slide_position - event.precise_y * 4))
                 else:
-                    self.slide_position = max(0, min(1, self.slide_position + event.precise_x / 25))
-
-                # self.request_render()
+                    self.slide_position = max(0, min(self.__sum_width - self.size[0],
+                                                     self.slide_position + event.precise_x * 4))
+                self.calculate_offset()
 
     def render(self):
         self.surface = pygame.Surface(self.size)
@@ -138,17 +143,14 @@ class SlidePanel(Element):
         for child in self.child:
             child.draw(self.__child_surface)
 
-        delta_width = max(0, self.__child_surface.get_width() - self.size[0])
-        delta_height = max(0, self.__child_surface.get_height() - self.size[1])
-
-        x = 0 if self.style.get_property("align") == "vertical" else self.slide_position * -delta_width
-        y = self.slide_position * -delta_height if self.style.get_property("align") == "vertical" else 0
+        x = 0 if self.style.get_property("align") == "vertical" else -self.slide_position
+        y = -self.slide_position if self.style.get_property("align") == "vertical" else 0
 
         self.surface.blit(self.__child_surface, [x, y])
-
         self._post_render()
 
     def add_child(self, element):
+        element.render()
         self.child.append(element)
         self.calculate_position()
         element.post_render_handlers.append(self.request_render)
@@ -156,14 +158,23 @@ class SlidePanel(Element):
     def clear_child(self):
         self.child = []
 
+    def calculate_offset(self):
+        if self.style.get_property("align") == "vertical":
+            for element in self.child:
+                element.offset = self.position[0], self.position[1] - self.slide_position
+
+        else:
+            for element in self.child:
+                element.offset = self.position[0] - self.slide_position, self.position[1]
+
     def calculate_position(self):
-        sum_width = sum([elem.size[0] for elem in self.child])
-        sum_height = sum([elem.size[1] for elem in self.child])
+        self.__sum_width = sum([elem.size[0] for elem in self.child])
+        self.__sum_height = sum([elem.size[1] for elem in self.child])
 
-        width = self.size[0] if self.style.get_property("align") == "vertical" else sum_width
-        height = sum_height if self.style.get_property("align") == "vertical" else self.size[1]
+        self.__width = self.size[0] if self.style.get_property("align") == "vertical" else self.__sum_width
+        self.__height = self.__sum_height if self.style.get_property("align") == "vertical" else self.size[1]
 
-        self.__child_surface = pygame.Surface([width, height])
+        self.__child_surface = pygame.Surface([self.__width, self.__height])
 
         if self.style.get_property("align") == "vertical":
             previous_height = 0
@@ -171,7 +182,6 @@ class SlidePanel(Element):
                 y = previous_height
                 element.position = (0, y)
                 element.size = (min(self.size[0], element.size[0]), element.size[1])
-                element.offset = self.position
                 previous_height += element.size[1]
 
         else:
@@ -180,5 +190,6 @@ class SlidePanel(Element):
                 x = previous_width
                 element.position = (x, 0)
                 element.size = (element.size[0], min(self.size[1], element.size[1]))
-                element.offset = self.position
                 previous_width += element.size[0]
+
+        self.calculate_offset()

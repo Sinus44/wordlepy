@@ -1,5 +1,5 @@
 from scenectrl import Scene
-from .menuscenegui import layout, start_button, exit_button, history_button
+from .menuscenegui import layout, start_button, exit_button, history_button, settings_button
 
 
 class MenuScene(Scene):
@@ -9,6 +9,10 @@ class MenuScene(Scene):
         start_button.on_click_handlers.append(self.start_button_click)
         exit_button.on_click_handlers.append(lambda event, sender: self.app.stop())
         history_button.on_click_handlers.append(self.history_button_click)
+        settings_button.on_click_handlers.append(self.settings_button_click)
+
+    def settings_button_click(self, event, sender):
+        self.app.scene_controller.select_scene("settings")
 
     def history_button_click(self, event, sender):
         self.app.scene_controller.select_scene("history")

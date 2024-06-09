@@ -8,6 +8,7 @@
     значение для 3-го ключа - НОВОЕ название свойства
 
 """
+import copy
 
 
 class Style:
@@ -105,7 +106,7 @@ class Style:
             if property_name not in from_style._properties["normal"]:
                 raise Exception(f"При создании стиля \"{type(self).__name__}\" в карте копирования из стиля "
                                 f"\"{type(from_style).__name__}\" произошла ошибка: параметр \"{property_name}\" не был"
-                                f" обнаружен")
+                                f" обнаружен в \"{type(from_style).__name__}\"")
 
             self._properties["normal"][copy_map[property_name]] = from_style._properties["normal"][property_name]
 
@@ -115,3 +116,6 @@ class Style:
                       f"\"{type(from_style).__name__}\"")
 
         self._call_events()
+
+    def copy(self):
+        return copy.deepcopy(self)

@@ -1,12 +1,11 @@
 import pygame
 
-import gui
+from .style import Style
 
 
 class Element:
 
     # region Properties
-
     # region Hovered property
 
     @property
@@ -15,10 +14,12 @@ class Element:
 
     @hovered.setter
     def hovered(self, value):
-        if value != self.__hovered:
-            self.__hovered = value
-            for handler in self.prop_hovered_set_handlers:
-                handler(self, None)
+        if value == self.__hovered:
+            return
+
+        self.__hovered = value
+        for handler in self.prop_hovered_set_handlers:
+            handler(self, None)
 
     @hovered.deleter
     def hovered(self):
@@ -53,10 +54,12 @@ class Element:
 
     @enable.setter
     def enable(self, value):
-        if value != self.__enable:
-            self.__enable = value
-            for handler in self.prop_enable_set_handlers:
-                handler(self, None)
+        if value == self.__enable:
+            return
+
+        self.__enable = value
+        for handler in self.prop_enable_set_handlers:
+            handler(self, None)
 
     @enable.deleter
     def enable(self):
@@ -72,10 +75,12 @@ class Element:
 
     @active.setter
     def active(self, value):
-        if value != self.__active:
-            self.__active = value
-            for handler in self.prop_active_set_handlers:
-                handler(self, None)
+        if value == self.__active:
+            return
+
+        self.__active = value
+        for handler in self.prop_active_set_handlers:
+            handler(self, None)
 
     @active.deleter
     def active(self):
@@ -91,10 +96,12 @@ class Element:
 
     @position.setter
     def position(self, value):
-        if value != self.__position:
-            self.__position = value
-            for handler in self.prop_position_set_handlers:
-                handler(None, self)
+        if value == self.__position:
+            return
+
+        self.__position = value
+        for handler in self.prop_position_set_handlers:
+            handler(None, self)
 
     @position.deleter
     def position(self):
@@ -110,10 +117,12 @@ class Element:
 
     @offset.setter
     def offset(self, value):
-        if value != self.__offset:
-            self.__offset = value
-            for handler in self.prop_offset_set_handlers:
-                handler(None, self)
+        if value == self.__offset:
+            return
+
+        self.__offset = value
+        for handler in self.prop_offset_set_handlers:
+            handler(None, self)
 
     @offset.deleter
     def offset(self):
@@ -129,10 +138,12 @@ class Element:
 
     @size.setter
     def size(self, value):
-        if value != self.__size:
-            self.__size = value
-            for handler in self.prop_size_set_handlers:
-                handler(self, None)
+        if value == self.__size:
+            return
+
+        self.__size = value
+        for handler in self.prop_size_set_handlers:
+            handler(self, None)
 
     @size.deleter
     def size(self):
@@ -148,10 +159,12 @@ class Element:
 
     @style.setter
     def style(self, value):
-        if value != self.__style:
-            self.__style = value
-            for handler in self.prop_style_set_handlers:
-                handler(self, None)
+        if value == self.__style:
+            return
+
+        self.__style = value
+        for handler in self.prop_style_set_handlers:
+            handler(self, None)
 
     @style.deleter
     def style(self):
@@ -167,17 +180,18 @@ class Element:
 
     @userdata.setter
     def userdata(self, value):
-        if value != self.__userdata:
-            self.__userdata = value
-            for handler in self.prop_userdata_set_handlers:
-                handler(self, None)
+        if value == self.__userdata:
+            return
+
+        self.__userdata = value
+        for handler in self.prop_userdata_set_handlers:
+            handler(self, None)
 
     @userdata.deleter
     def userdata(self):
         del self.__userdata
 
     # endregion
-
     # endregion
 
     def __init__(self):
@@ -186,7 +200,7 @@ class Element:
         self.__position = (0, 0)
         self.__offset = (0, 0)
         self.__size = [100, 100]
-        self.__style = gui.Style()
+        self.__style = Style()
         self.__userdata = {}
 
         self.__hovered = False
@@ -201,15 +215,16 @@ class Element:
 
         self.event_handlers = []
         self.on_click_handlers = []
+        self.on_right_click_handlers = []
         self.on_miss_click_handlers = []
         self.post_render_handlers = []
 
-        self.prop_style_set_handlers = []
-        self.prop_enable_set_handlers = []
-        self.prop_hovered_set_handlers = []
-        self.prop_active_set_handlers = []
+        self.prop_style_set_handlers = [self.request_render]
+        self.prop_enable_set_handlers = [self.request_render]
+        self.prop_hovered_set_handlers = [self.request_render]
+        self.prop_active_set_handlers = [self.request_render]
         self.prop_position_set_handlers = [self.request_render]
-        self.prop_offset_set_handlers = []
+        self.prop_offset_set_handlers = []  # self.request_render]
         self.prop_size_set_handlers = [self.request_render]
         self.prop_userdata_set_handlers = []
 
@@ -246,8 +261,12 @@ class Element:
         self.hovered = self.collide(pygame.mouse.get_pos())
 
         if event.type == pygame.MOUSEBUTTONUP:
-            if self.collide(event.pos):
+            if event.button == 1 and self.collide(event.pos):
                 if self.__on_click(event, sender):
+                    return True
+
+            elif event.button == 3 and self.collide(event.pos):
+                if self.__on_right_click(event, sender):
                     return True
 
             else:
@@ -255,6 +274,11 @@ class Element:
 
         elif event.type == pygame.WINDOWLEAVE:
             self.hovered = False
+
+    def __on_right_click(self, event, sender):
+        for on_right_click_handler in self.on_right_click_handlers:
+            if on_right_click_handler(event, self):
+                return True
 
     def __on_click(self, event, sender):
         for on_click_handler in self.on_click_handlers:

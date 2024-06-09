@@ -25,6 +25,11 @@ class HistoryScene(Scene):
     def back_button_click(self, event, sender):
         self.app.scene_controller.select_scene("menu")
 
+    def open_game_button(self, event, sender):
+        self.app.view_game = sender.userdata["game_index"]
+        self.app.scene_controller.select_scene("viewgame")
+        return True
+
     def generate_child(self):
         records = [f'{game["word"]} - {"победа" if game["win"] else "поражение"}' for game in self.games[::-1]]
         slide.clear_child()
@@ -33,9 +38,10 @@ class HistoryScene(Scene):
             btn = gui.Button()
             btn.size = (100 * pw, 3 * ph)
             btn.text = f"#{len(records) - i} {record}"
-            btn.userdata["game_index"] = i
+            btn.userdata["game_index"] = len(records) - i - 1
             btn.style.set_property("normal", "background_color", palette[4] if i % 2 else (50, 50, 50))
-            btn.render()
+            btn.on_click_handlers.append(self.open_game_button)
+            btn.prop_hovered_set_handlers = []
             slide.add_child(btn)
 
         layout.render()

@@ -1,11 +1,15 @@
 import json
+import os
 
 
 class History:
-    FILE_PATH = "history.json"
+    FILE_PATH = "userdata/history.json"
 
     @staticmethod
     def load():
+        if not os.path.exists(History.FILE_PATH):
+            return []
+
         with open(History.FILE_PATH) as file:
             raw = file.read()
 

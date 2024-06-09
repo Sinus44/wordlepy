@@ -3,12 +3,14 @@ import random
 import cell
 import cellcodes
 import history
-import word_reader
+import jsonreader
+import wordreader
+import wordvalidator
 
 
 class Game:
     def __init__(self):
-        self.words_path = "./words.txt"
+        self.words_path = "./userdata/words.txt"
         self.words_size = 6
         self.attempt_count = 5
         self.current_attempt = 0
@@ -18,14 +20,20 @@ class Game:
         self.current_word = ""
         self.ended = True
         self.win = False
+        self.settings = {}
+        self.save_history = True
+        self.use_word_validator = True
         self.start()
 
     def start(self):
+        self.settings = jsonreader.read("userdata/settings.json", {})
+        self.save_history = self.settings.get("save_history", True)
+        self.use_word_validator = self.settings.get("use_word_validator", True)
         self.ended = False
         self.win = False
         self.current_attempt = 0
         self.current_symbol = 0
-        self.words = word_reader.read_words(self.words_path, self.words_size)
+        self.words = wordreader.read_words(self.words_path, self.words_size)
         self.current_word = random.choice(self.words).upper()
         self.plane = [[cell.Cell() for _ in range(self.words_size)] for _ in range(self.attempt_count)]
 
@@ -76,6 +84,10 @@ class Game:
         if not self.is_full_string():
             return
 
+        if self.use_word_validator:
+            if not wordvalidator.RuWordValidator.validate(self.get_text()):
+                return
+
         if not self.check():
             if self.current_attempt < self.attempt_count - 1:
                 self.current_attempt += 1
@@ -86,4 +98,5 @@ class Game:
 
     def end(self):
         self.ended = True
-        history.History.add_game(self)
+        if self.save_history:
+            history.History.add_game(self)
